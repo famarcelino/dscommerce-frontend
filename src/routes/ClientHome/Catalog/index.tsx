@@ -29,7 +29,7 @@ export default function Catalog() {
                 setProducts(products.concat(nextPage));
                 setIsLastPage(response.data.last);
             });
-    }, [products, queryParams]);
+    }, [queryParams]);
 
     function handleSearch(searchText: string) {
         setProducts([]);
