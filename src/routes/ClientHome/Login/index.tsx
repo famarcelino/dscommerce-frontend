@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import './styles.css';
 import { useState } from 'react';
 import { CredentialsDTO } from '../../../models/auth';
@@ -20,8 +21,7 @@ export default function Login() {
         event.preventDefault();
         authService.loginRequest(formData)
             .then(response => {
-                authService.saveAccessToken(response.data.access_token);
-                console.log(response.data);
+                authService.saveAccessToken(response.data.access_token);   
             })
             .catch(error => {
                 console.log("Erro no login", error);
