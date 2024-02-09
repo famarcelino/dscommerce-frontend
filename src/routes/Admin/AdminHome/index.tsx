@@ -12,10 +12,7 @@ export default function AdminHome() {
             .then(response => {
                 console.log(response.data);
                 setUser(response.data);
-            })
-            .catch(error => {
-                console.log("Error", error);
-            })
+            });
     }, []);
 
     return (
