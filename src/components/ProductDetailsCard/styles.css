@@ -2,10 +2,10 @@
     padding: 20px 0;
 }
 
-.product-details-top {
+.dsc-product-details-top {
     padding: 10px;
     display: flex;
-    justify-items: center;
+    justify-content: center;
 }
 
 .dsc-product-details-top img {
