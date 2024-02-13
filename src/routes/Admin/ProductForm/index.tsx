@@ -1,6 +1,56 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import './styles.css';
+import * as forms from '../../../utils/forms';
+import * as productService from '../../../services/product-service';
+import { Link, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import ButtonInverse from '../../../components/ButtonInverse';
+import FormInput from '../../../components/FormInput';
 
 export default function ProductForm() {
+
+    const params = useParams();
+
+    const isEditing = params.productId !== 'create';
+
+    const [formData, setFormData] = useState<any>({
+        name: {
+            value: "",
+            id: "name",
+            name: "name",
+            type: "text",
+            placeholder: "Nome",
+        },
+        price: {
+            value: "",
+            id: "price",
+            name: "price",
+            type: "number",
+            placeholder: "Preço",
+        },
+        imgUrl: {
+            value: "",
+            id: "imgUrl",
+            name: "imgUrl",
+            type: "text",
+            placeholder: "Imagem",
+        }
+    })
+
+    useEffect(() => {
+        if (isEditing) {
+            productService.findById(Number(params.productId))
+                .then(response => {
+                    const newFormData = forms.updateAll(formData, response.data);
+                    setFormData(newFormData);
+                });
+        }
+    }, []);
+
+    function handleInputChange(event: any) {
+        setFormData(forms.update(formData, event.target.name, event.target.value));
+    }
+
     return (
         <main>
             <section id="product-form-section" className="dsc-container">
@@ -9,28 +59,34 @@ export default function ProductForm() {
                         <h2>Dados do produto</h2>
                         <div className="dsc-form-controls-container">
                             <div>
-                                <input className="dsc-form-control" type="text" placeholder="Nome" />
+                                <FormInput
+                                    {...formData.name}
+                                    className="dsc-form-control"
+                                    onChange={handleInputChange}
+                                />
                             </div>
                             <div>
-                                <input className="dsc-form-control" type="text" placeholder="Preço" />
+                                <FormInput
+                                    {...formData.price}
+                                    className="dsc-form-control"
+                                    onChange={handleInputChange}
+                                />
                             </div>
                             <div>
-                                <input className="dsc-form-control" type="text" placeholder="Imagem" />
+                                <FormInput
+                                    {...formData.imgUrl}
+                                    className="dsc-form-control"
+                                    onChange={handleInputChange}
+                                />
                             </div>
-                            <div>
-                                <select className="dsc-form-control dsc-select" required>
-                                    <option value="" disabled selected>Categorias</option>
-                                    <option value="1">Valor 1</option>
-                                    <option value="2">Valor 2</option>
-                                </select>
-                            </div>
-                            <div>
-                                <textarea className="dsc-form-control dsc-textarea" placeholder="Descrição"></textarea>
-                            </div>
+
+
                         </div>
 
                         <div className="dsc-product-form-buttons">
-                            <button type="reset" className="dsc-btn dsc-btn-white">Cancelar</button>
+                            <Link to="/admin/products">
+                                <ButtonInverse text="Cancelar" />
+                            </Link>
                             <button type="submit" className="dsc-btn dsc-btn-blue">Salvar</button>
                         </div>
                     </form>
