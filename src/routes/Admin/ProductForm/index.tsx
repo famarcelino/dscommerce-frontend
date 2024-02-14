@@ -27,7 +27,7 @@ export default function ProductForm() {
             name: "price",
             type: "number",
             placeholder: "Preço",
-            validation: function(value: any) {
+            validation: function (value: any) {
                 return Number(value) > 0;
             },
             message: "Favor informar um valor positivo."
@@ -52,7 +52,9 @@ export default function ProductForm() {
     }, []);
 
     function handleInputChange(event: any) {
-        setFormData(forms.update(formData, event.target.name, event.target.value));
+        const dataUpdated = forms.update(formData, event.target.name, event.target.value);
+        const dataValidated = forms.validate(dataUpdated, event.target.name);
+        setFormData(dataValidated);
     }
 
     return (
@@ -68,6 +70,7 @@ export default function ProductForm() {
                                     className="dsc-form-control"
                                     onChange={handleInputChange}
                                 />
+                                <div className='dsc-form-error'>{formData.name.message}</div>
                             </div>
                             <div>
                                 <FormInput
@@ -75,6 +78,7 @@ export default function ProductForm() {
                                     className="dsc-form-control"
                                     onChange={handleInputChange}
                                 />
+                                <div className='dsc-form-error'>{formData.price.message}</div>
                             </div>
                             <div>
                                 <FormInput
@@ -83,8 +87,6 @@ export default function ProductForm() {
                                     onChange={handleInputChange}
                                 />
                             </div>
-
-
                         </div>
 
                         <div className="dsc-product-form-buttons">
