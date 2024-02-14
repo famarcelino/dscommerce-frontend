@@ -78,7 +78,7 @@ export default function Login() {
                                     onTurnDirty={handleTurnDirty}
                                     onChange={handleInputChange}
                                 />
-                                
+                                <div className="dsc-form-error">{formData.password.message}</div>
                             </div>
                         </div>
 
