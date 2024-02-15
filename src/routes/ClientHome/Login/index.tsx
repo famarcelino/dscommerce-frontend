@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import './styles.css';
 import { useContext, useState } from 'react';
-import * as authService from '../../../services/auth-service';
-import * as forms from '../../../utils/forms';
 import { useNavigate } from 'react-router-dom';
 import { ContextToken } from '../../../utils/context-token';
 import FormInput from '../../../components/FormInput';
+import * as authService from '../../../services/auth-service';
+import * as forms from '../../../utils/forms';
 
 export default function Login() {
 
     const { setContextTokenPayload } = useContext(ContextToken);
 
     const navigate = useNavigate();
+
+    const [submitResponseFail, setSubmitResponseFail] = useState(false);
 
     const [formData, setFormData] = useState<any>({
         username: {
@@ -44,14 +46,23 @@ export default function Login() {
 
     function handleSubmit(event: any) {
         event.preventDefault();
+
+        setSubmitResponseFail(false);
+
+        const formDataValidated = forms.dirtyAndValidate(formData);
+        if (forms.hasAnyInvalid(formDataValidated)) {
+            setFormData(formDataValidated);
+            return;
+        }
+
         authService.loginRequest(forms.toValues(formData))
             .then(response => {
                 authService.saveAccessToken(response.data.access_token);
                 setContextTokenPayload(authService.getAccessTokenPayload());
                 navigate("/cart");
             })
-            .catch(error => {
-                console.log("Erro no login", error);
+            .catch(() => {
+                setSubmitResponseFail(true);
             });
     }
 
@@ -81,7 +92,12 @@ export default function Login() {
                                 <div className="dsc-form-error">{formData.password.message}</div>
                             </div>
                         </div>
-
+                        {
+                            submitResponseFail &&
+                            <div className="dsc-form-global-error">
+                                Usuários ou senha inválidos
+                            </div>
+                        }
                         <div className="dsc-login-form-buttons dsc-mt20">
                             <button
                                 type="submit"
