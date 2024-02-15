@@ -8,8 +8,8 @@ import { useEffect, useState } from 'react';
 import ButtonInverse from '../../../components/ButtonInverse';
 import FormInput from '../../../components/FormInput';
 import FormTextArea from '../../../components/FormTextArea';
-import { CategoryDTO } from '../../../models/categories';
 import FormSelect from '../../../components/FormSelect';
+import { CategoryDTO } from '../../../models/categories';
 import { selectStyles } from '../../../utils/select';
 
 export default function ProductForm() {
@@ -62,7 +62,7 @@ export default function ProductForm() {
             message: "A descrição deve ter pelo menos 10 caracteres.",
         },
         categories: {
-            values: [],
+            value: [],
             id: "categories",
             name: "categories",
             placeholder: "Categorias",
@@ -98,11 +98,22 @@ export default function ProductForm() {
         setFormData(forms.dirtyAndValidate(formData, name));
     }
 
+    function handleSubmit(event: any) {
+        event.preventDefault();
+
+        const formDataValidated = forms.dirtyAndValidateAll(formData);
+        if (forms.hasAnyInvalid(formDataValidated)) {
+            setFormData(formDataValidated);
+            return;
+        }
+        //console.log(forms.toValues(formData));
+    }
+
     return (
         <main>
             <section id="product-form-section" className="dsc-container">
                 <div className="dsc-product-form-container">
-                    <form className="dsc-card dsc-form">
+                    <form className="dsc-card dsc-form" onSubmit={handleSubmit}>
                         <h2>Dados do produto</h2>
                         <div className="dsc-form-controls-container">
                             <div>
