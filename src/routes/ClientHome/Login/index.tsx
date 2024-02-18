@@ -49,7 +49,7 @@ export default function Login() {
 
         setSubmitResponseFail(false);
 
-        const formDataValidated = forms.dirtyAndValidate(formData);
+        const formDataValidated = forms.dirtyAndValidateAll(formData);
         if (forms.hasAnyInvalid(formDataValidated)) {
             setFormData(formDataValidated);
             return;
